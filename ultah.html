@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  color:white;
+  text-align:center;
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+  background-size:200% 200%;
+  animation:bg 8s ease infinite;
+  overflow-x:hidden;
+  position:relative;
+}
+@keyframes bg{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* OPENING */
+#opening{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+#opening button{
+  margin-top:30px;
+  padding:16px 42px;
+  border:none;
+  border-radius:40px;
+  background:#ff4f81;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(0,0,0,.3);
+}
+
+/* MAIN */
+#main{display:none;padding:60px 20px}
+.card{
+  max-width:760px;
+  margin:auto;
+  padding:40px 25px;
+  border-radius:26px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(14px);
+  box-shadow:0 15px 35px rgba(0,0,0,.3);
+}
+.avatar{
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #fff;
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{50%{transform:translateY(-12px)}}
+
+.btn{
+  margin:12px;
+  padding:14px 36px;
+  border:none;
+  border-radius:40px;
+  cursor:pointer;
+}
+.hug{background:#ff6f91;color:white}
+.secret{background:#ffe3ec;color:#b3003b}
+
+/* COUNTDOWN */
+.countdown{
+  margin:30px auto;
+  padding:24px;
+  border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,255,255,.4),rgba(255,255,255,.15));
+  box-shadow:0 0 35px rgba(255,0,120,.5);
+}
+.timer{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:16px;
+}
+.box{
+  min-width:90px;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.25);
+}
+.box span{
+  display:block;
+  font-size:40px;
+  font-weight:700;
+}
+
+/* HEART */
+.heart{
+  position:fixed;
+  bottom:20px;
+  font-size:24px;
+  animation:fly 4s linear forwards;
+}
+@keyframes fly{
+  to{transform:translateY(-120vh);opacity:0}
+}
+
+/* POPUP */
+#popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+
+/* WAITING POPUP */
+#waitingPopup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.popup{
+  background:white;
+  color:#ff3366;
+  padding:30px;
+  border-radius:22px;
+  max-width:360px;
+  max-height:70vh;
+  overflow-y:auto;
+  transform:scale(.6) translateY(20px);
+  opacity:0;
+  box-shadow:0 20px 40px rgba(0,0,0,.3);
+  transition:.6s ease-out;
+}
+.popup.show{
+  transform:scale(1) translateY(0);
+  opacity:1;
+}
+
+/* 📖 BUKU */
+#bukuWrapper{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+.buku{
+  width:820px;
+  height:480px;
+  perspective:2000px;
+  display:flex;
+}
+.page{
+  width:50%;
+  height:100%;
+  background:#fffafc;
+  position:relative;
+  transform-style:preserve-3d;
+}
+.page.left{
+  border-right:2px solid #f2b6c6;
+  padding:40px;
+  font-family:'Poppins',sans-serif;
+  font-size:18px;
+  line-height:1.6;
+  color:#b3003b;
+}
+.page.right{
+  transform-origin:left;
+  transition:transform 1s;
+}
+.page.right.flip{transform:rotateY(-180deg)}
+.page .front,.page .back{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  padding:20px;
+}
+.page .back{transform:rotateY(180deg)}
+.page img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:14px;
+}
+
+/* NAV */
+.book-nav{
+  position:absolute;
+  bottom:18px;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:0 16px;
+  z-index:10;
+}
+.book-nav button{
+  border:none;
+  background:#ff6b8a;
+  color:white;
+  font-size:18px;
+  padding:10px 14px;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:0 4px 8px rgba(0,0,0,.25);
+  transition:.2s;
+}
+.book-nav button:hover{
+  transform:scale(1.15);
+  background:#ff4d73;
+}
+.book-nav button:last-child{
+  position:absolute;
+  top:-400px;
+  right:16px;
+  background:#ff6f91;
+}
+
+/* 🌸 */
+.petal{
+  position:fixed;
+  top:-20px;
+  font-size:18px;
+  animation:fallPetal linear forwards;
+  z-index:1000;
+}
+@keyframes fallPetal{
+  to{transform:translateY(110vh) rotate(360deg);opacity:0}
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+  #main { padding: 40px 15px; }
+  .card { padding: 30px 20px; }
+  .avatar { width: 150px; height: 150px; }
+  .box span { font-size: 30px; }
+  .box { min-width: 70px; padding: 12px; }
+  .timer { gap: 12px; }
+  .buku { width: 90vw; height: 60vh; }
+  .page.left { padding: 20px; font-size: 16px; }
+  .book-nav button { font-size: 16px; padding: 8px 12px; }
+  .popup { max-width: 90vw; padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING -->
+<div id="opening">
+  <h1>💖 Hai Cantikk 💖</h1>
+  <p>Ada sesuatu yang spesial buat kamu…</p>
+  <button onclick="masuk()">Masuk yuu 💌</button>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="card">
+    <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+    <h1>LISDA NUR MUSLIHAH</h1>
+    <img class="avatar" src="foto.jpg">
+    <p id="pesan"></p>
+
+    <button class="btn hug" onclick="peluk()">Buat Kamu 🤍</button>
+    <button class="btn secret">Pesan Rahasia 💌 </button>
+
+    <div class="countdown">
+      <h3 id="judulCountdown">💖 Menuju Momen Spesial 💖</h3>
+      <p>PENASARAN YAA HEHE 🤍</p>
+      <div class="timer" id="timerBox">
+        <div class="box"><span id="cJam">00</span><small>JAM</small></div>
+        <div class="box"><span id="cMenit">00</span><small>MENIT</small></div>
+        <div class="box"><span id="cDetik">00</span><small>DETIK</small></div>
+      </div>
+      <h3 id="teksCountdown">Siap - Siap Yaa Cantikk :v</h3>
+       <p>from : muhmdmaulnafrhn </p>
+    </div>
+
+    <audio id="lagu" src="lagu.mp3"></audio>
+  </div>
+</div>
+
+<!-- 📖 BUKU -->
+<div id="bukuWrapper">
+  <div class="buku">
+    <div class="page left"><p id="bookText"></p></div>
+    <div class="page right" id="pageFlip">
+      <div class="front"><img id="bookImg"></div>
+      <div class="back"><img id="bookImgBack"></div>
+      <div class="book-nav">
+        <button onclick="prevPage()">◀</button>
+        <button onclick="nextPage()">▶</button>
+        <button onclick="tutupBuku()">✖</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div id="popup">
+  <div class="popup">
+    <h2>💖 Untuk Kamu Manusia Cantik </h2>
+    <p>hari ini adalah hari dimnaa manusia cantik dilahirkan didunia. selamat bertambah usia yaa . semoga panjang umur, sehat selalu, murah rezeki, aminnn. makin sayang sama keluarga dan sama aku jugaa yaa hehe. semoga dengan bertambahnya usia km ini allah permudah semua urusan km baik itu urusan dunia maupun akhirat. semoga apaa yang kamu cita citakan terwujud, semoga selalu bahagia. aku bersyukur bngt punya km sekarang.
+ 🤍</p>
+ <p>semoga untuk tahun ini dan seterusnya km bisa jadi pribadi yang lebih baik. selalu inget sama tuhan yaa .</p>
+ <p>sekali lagi happy birthday cantikk✨🤍</p>
+ <p>from : muhmdmaulnafrhn✨</p>
+    <button class="btn hug" onclick="tutupPopup()">Tutup</button>
+  </div>
+</div>
+
+<!-- WAITING POPUP -->
+<div id="waitingPopup">
+  <div class="popup">
+    <h2>⏳ Tunggu Dulu</h2>
+    <p>Tunggu moment spesial tiba yaa baru bisa di lihat pesan nya</p>
+     <h2>CIEE MAKIN PENASARAN HEHE</h2>
+    <button class="btn hug" onclick="tutupWaitingPopup()">Tutup</button>
+  </div>
+</div>
+
+<script>
+const btnSecret=document.querySelector(".secret");
+btnSecret.style.opacity=.5;
+let popupShown=false,momentReached=false;
+
+btnSecret.onclick = () => {
+  if (!momentReached) {
+    waitingPopup.style.display = "flex";
+    waitingPopup.querySelector(".popup").classList.add("show");
+    return;
+  }
+  popup.style.display = "flex";
+  popup.querySelector(".popup").classList.add("show");
+};
+
+function tutupPopup(){
+  popup.querySelector(".popup").classList.remove("show");
+  setTimeout(()=>{
+    popup.style.display="none";
+  },300);
+}
+
+function tutupWaitingPopup(){
+  waitingPopup.querySelector(".popup").classList.remove("show");
+  setTimeout(()=>{
+    waitingPopup.style.display="none";
+  },300);
+}
+
+
+/* MASUK */
+function masuk(){
+  opening.style.display="none";
+  main.style.display="block";
+  ketik();
+  lagu.volume=0;lagu.play();fadeInMusic();
+}
+function fadeInMusic(){
+  let v=0;let f=setInterval(()=>{
+    if(v>=.7){clearInterval(f);return;}
+    v+=.02;lagu.volume=v;
+  },200);
+}
+
+/* TYPE */
+let text="Selamat ulang tahun ya manusia cantik 💕 Salam hangat dari aku 🤍";
+let i=0;
+function ketik(){
+  if(i<text.length){
+    pesan.innerHTML+=text.charAt(i++);
+    setTimeout(ketik,55);
+  }
+}
+
+/* LOVE */
+function peluk(j=100){
+  for(let i=0;i<j;i++){
+    setTimeout(()=>{
+      let h=document.createElement("div");
+      h.className="heart";h.innerHTML="💖";
+      h.style.left=Math.random()*100+"vw";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),4000);
+    },i*120);
+  }
+}
+
+/* COUNTDOWN AMAN */
+let now=new Date();
+let target=new Date(now.getFullYear(),now.getMonth(),now.getDate(),1,13,0);
+if(target<=now)target.setDate(target.getDate()+1);
+target=target.getTime();
+
+setInterval(()=>{
+  let d=Math.floor((target-Date.now())/1000);
+  if(d<=0){
+    if(!momentReached){
+      momentReached=true;
+      btnSecret.disabled=false;btnSecret.style.opacity=1;
+      judulCountdown.innerHTML="💖 Selamat Datang di Cerita Kita 1 thn terakhir💖";
+      timerBox.innerHTML=`<button class="btn hug" onclick="bukaBuku()">📖 Buka Buku Kenangan</button>`;
+      teksCountdown.innerHTML="Ini semua aku buat khusus untuk kamu 🤍, maaf yaa cumaa itu aja";
+      peluk(40);
+      if(!popupShown){
+        popupShown=true;
+        popup.style.display="flex";
+        popup.querySelector(".popup").classList.add("show");
+      }
+    }
+    return;
+  }
+  cJam.textContent=String(Math.floor(d/3600)).padStart(2,"0");
+  cMenit.textContent=String(Math.floor(d%3600/60)).padStart(2,"0");
+  cDetik.textContent=String(d%60).padStart(2,"0");
+},1000);
+
+/* 📖 BUKU */
+const pages=[
+  {text:"Happy Birthday Cantikk 🤍<br><br>“di hari lahirmu, aku merayakan awal dari cerita kita. dari momen sederhana hingga tawa kecil, semuanya terangkai sejak hari itu. buku ini menyimpan kenangan kita, bulan demi bulan, karena waktu menjadi lebih bermakna saat ada km di dalamnya. januari menjadi halaman pertama perjalanan kita.”<br><br>Lanjut gaa nii",img:"g13.jpg"},
+ {text:"Januari 🤍<br><br>“januari menjadi awal dari cerita kita. dari pertemuan sederhana hingga rasa nyaman yang perlahan tumbuh. semua dimulai tanpa rencana besar, hanya menikmati waktu bersama. di bulan ini, kita belajar berjalan pelan dan saling menyesuaikan. banyak hal masih terasa baru, tapi semuanya terasa menyenangkan. januari adalah halaman pertama perjalanan kita.”",img:"g1.jpg"},
+ {text:"Febuari 💕<br><br>“di februari, kebersamaan terasa lebih hangat. dari tawa kecil hingga momen singkat yang berarti. tanpa disadari, rasa itu tumbuh perlahan bersama waktu. kita mulai terbiasa saling ada satu sama lain. setiap pertemuan terasa dinantikan. februari menyimpan banyak cerita manis kita.”",img:"g2.jpg"},
+ {text:"Maret 🌸<br><br>“maret membawa kita saling mengenal lebih dalam. dari obrolan sederhana hingga kebiasaan kecil yang bermakna. semuanya berjalan apa adanya tanpa paksaan. waktu terasa ramah saat dijalani bersama. banyak hal kecil mulai terasa penting. maret menjadi bagian penting dari cerita kita.”",img:"g3.jpg"},
+ {text:"April 💖<br><br>“di april, waktu terasa berjalan lebih pelan. dari momen biasa hingga tawa yang datang tanpa rencana. semua terasa ringan saat dijalani bersama. kita belajar menikmati hal kecil tanpa tergesa. kebersamaan mulai terasa lebih utuh. april mengajarkan arti kebersamaan.”",img:"g4.jpg"},
+ {text:"Mei <br><br>“mei hadir dengan banyak cerita kecil. dari kebersamaan sederhana hingga rasa nyaman yang semakin tumbuh. tanpa perlu banyak kata, semuanya terasa cukup. kebahagiaan datang dengan cara yang tenang. banyak momen ingin diulang kembali. mei menyimpan kenangan hangat tentang kita.”",img:"g5.jpg"},
+ {text:"Juni🤍<br><br>“di juni, kita mulai terbiasa dengan kebersamaan. dari hal-hal kecil hingga momen yang terasa berharga. waktu berjalan tanpa terasa saat bersama. rasa itu tumbuh tanpa disadari. hari-hari terasa lebih ringan. juni menjadi saksi cerita yang semakin nyata.”",img:"g6.jpg"},
+ {text:"Juli <br><br>“juli mengajarkan arti saling ada. dari tawa sederhana hingga kebersamaan yang tenang. tak selalu tentang hal besar atau rencana jauh. cukup hadir dan saling menemani. banyak momen sederhana terasa berarti. juli menjadi bagian penting dari perjalanan kita.”",img:"g7.jpg"},
+ {text:"Agustus <br><br>“di agustus, bahagia datang tanpa banyak rencana. dari momen singkat hingga kenangan yang menetap lama. semuanya terasa ringan dan jujur. kebersamaan terasa semakin natural. hari-hari diisi dengan tawa kecil. agustus menyimpan cerita sederhana kita.”",img:"g8.jpg"},
+ {text:"September <br><br>“september membawa rasa yang lebih hangat. dari kebiasaan kecil hingga kebersamaan yang semakin berarti. waktu terasa ramah saat dijalani bersama. banyak momen sederhana terasa istimewa. rasa nyaman semakin terasa. september melengkapi cerita perjalanan kita.”",img:"g9.jpg"},
+ {text:"Oktober <br><br>“di oktober, kita belajar menikmati waktu. dari momen tenang hingga tawa kecil yang berarti. tanpa tergesa dan tanpa paksaan. semua dijalani dengan lebih sadar. kebersamaan terasa lebih dalam. oktober menjadi bagian dari kenangan kita.”",img:"g10.jpg"},
+ {text:"November <br><br>“november menyimpan banyak rasa. dari syukur sederhana hingga kebersamaan yang terasa tulus. semua momen dijalani dengan perlahan. rasa nyaman semakin terasa nyata. banyak hal kecil patut disyukuri. november mengajarkan arti menghargai waktu bersama.”",img:"g11.jpg"},
+ {text:"Desember 💕<br><br>“dan desember menutup perjalanan ini. dari awal hingga akhir tahun yang kita lewati bersama. banyak cerita telah terukir sepanjang waktu. semua menjadi kenangan yang ingin disimpan selamanya. dan aku masih ingin melanjutkan semua cerita ini dengan km.”<br><br>from: farhann",img:"g12.jpg"}
+];
+let idx=0;
+function bukaBuku(){bukuWrapper.style.display="flex";renderBook();bunga();}
+function tutupBuku(){bukuWrapper.style.display="none";}
+function renderBook(){
+  bookText.innerHTML=pages[idx].text;
+  bookImg.src=pages[idx].img;
+  bookImgBack.src=pages[(idx+1)%pages.length].img;
+}
+function nextPage(){
+  pageFlip.classList.add("flip");
+  setTimeout(()=>{idx=(idx+1)%pages.length;renderBook();pageFlip.classList.remove("flip");},800);
+}
+function prevPage(){
+  pageFlip.classList.add("flip");
+  setTimeout(()=>{idx=(idx-1+pages.length)%pages.length;renderBook();pageFlip.classList.remove("flip");},800);
+}
+
+/* 🌸 */
+function bunga(){
+  for(let i=0;i<25;i++){
+    setTimeout(()=>{
+      let p=document.createElement("div");
+      p.className="petal";p.innerHTML="🌸";
+      p.style.left=Math.random()*100+"vw";
+      p.style.animationDuration=(Math.random()*3+4)+"s";
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),7000);
+    },i*200);
+  }
+}
+</script>
+</body>
+</html>
